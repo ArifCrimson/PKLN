@@ -19,14 +19,15 @@ use Illuminate\Support\Facades\Auth;
 
 class UserProfilesController extends Controller
 {
+    //for roles and permission 
     public function __construct(){
         $this->middleware('role:admin|urusetia|pelulus|user',['only' => ['index','create','store','edit','update','delete','report','show']]);
         $this->middleware('role:user',['only' => ['dashboard']]);
     }
     
-
+    //for showing the details of applicant
     public function index(){
-
+        
         $user = auth()->user();
         $ybcategories = YbCategoryModel::all();
         $panggilan = PanggilanModel::all();
@@ -46,6 +47,7 @@ class UserProfilesController extends Controller
     }
 
     public function store(Request $request){
+        //validation 
         $validator = Validator::make($request->all(),[
             'fname' => 'required|string|max:500',
             'portname' => 'required|string|max:255',
@@ -85,7 +87,7 @@ class UserProfilesController extends Controller
         }
 
         
-        
+        //gather all the input data before saving.
         $profile = new Profile();
         $profile->name = $request->input( 'fname');
         $profile->portfolio_name = $request->input('portname');
@@ -122,6 +124,7 @@ class UserProfilesController extends Controller
 
     }
 
+    //to redirect to profiles edit interface
     public function edit(Request $request,$id){
         $ybcategories = YbCategoryModel::all();
         $panggilan = PanggilanModel::all();
